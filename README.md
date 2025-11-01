@@ -1,4 +1,4 @@
-# 🚀 AI Chat with Durable Memory on Cloudflare
+# 🚀 AI Chat with Durable Memory on Cloudflare - For Internship Application
 
 A ChatGPT-style assistant that runs entirely on Cloudflare Workers, uses Workers AI (Llama 3.3), and stores user context in Durable Objects for persistent chat memory.
 
