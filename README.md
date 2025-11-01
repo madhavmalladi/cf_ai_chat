@@ -1,36 +1,142 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 AI Chat with Durable Memory on Cloudflare
 
-## Getting Started
+A ChatGPT-style assistant that runs entirely on Cloudflare Workers, uses Workers AI (Llama 3.3), and stores user context in Durable Objects for persistent chat memory.
 
-First, run the development server:
+## ✅ What's Included
+
+- **LLM (Llama 3.3)**: Workers AI integration
+- **Workers / Durable Objects**: Persistent chat memory
+- **Realtime chat I/O**: Modern chat UI in Next.js
+- **Memory / state**: Durable Object chat memory storage
+
+## 🏗️ Architecture
+
+```
+Next.js UI → /api/chat → Cloudflare Worker → Durable Object Memory
+                                        ↘ Workers AI (Llama 3.3)
+```
+
+## 🚀 Quick Start
+
+### 1. Install Dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure Cloudflare
+
+1. Get your Cloudflare Account ID from the dashboard
+2. Create a Cloudflare API token with Workers permissions
+3. Update `.dev.vars` with your credentials:
+
+```bash
+# .dev.vars
+AI_GATEWAY_URL=https://api.cloudflare.com/client/v4/accounts/<YOUR_ACCOUNT_ID>/ai/run/@cf/meta/llama-3.3-8b-instruct
+API_TOKEN=<YOUR_CLOUDFLARE_API_TOKEN>
+```
+
+### 3. Set Environment Variables
+
+Create `.env.local` for the Next.js app:
+
+```bash
+# .env.local
+NEXT_PUBLIC_WORKER_URL=http://localhost:8787
+```
+
+### 4. Development
+
+Start the Cloudflare Worker (in one terminal):
+
+```bash
+npm run worker:dev
+```
+
+Start the Next.js app (in another terminal):
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit `http://localhost:3000` to use EdgeChat!
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📦 Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Deploy Worker to Cloudflare
 
-## Learn More
+```bash
+npm run worker:deploy
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Deploy Next.js App
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Update `.env.local` with your deployed worker URL:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+NEXT_PUBLIC_WORKER_URL=https://edge-chat.<your-subdomain>.workers.dev
+```
 
-## Deploy on Vercel
+Then deploy to Vercel, Netlify, or your preferred platform.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠️ Available Scripts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run dev` - Start Next.js development server
+- `npm run worker:dev` - Start Cloudflare Worker locally
+- `npm run worker:deploy` - Deploy worker to Cloudflare
+- `npm run worker:tail` - View worker logs
+- `npm run build` - Build Next.js app for production
+
+## 📁 Project Structure
+
+```
+cloudflare-ai-chat/
+├── src/
+│   ├── app/
+│   │   ├── api/chat/route.ts    # Next.js API route
+│   │   ├── layout.tsx           # App layout
+│   │   └── page.tsx             # Main page
+│   └── components/
+│       └── Chat.tsx             # Chat UI component
+├── worker/
+│   ├── index.ts                 # Worker entry point
+│   ├── durable.ts               # Durable Object for chat memory
+│   └── types.ts                 # TypeScript types
+├── wrangler.toml                # Cloudflare Worker config
+├── .dev.vars                    # Local environment variables
+└── package.json
+```
+
+## 🔧 Configuration
+
+### Wrangler Configuration
+
+The `wrangler.toml` file configures:
+
+- Durable Objects for chat memory
+- Workers AI binding
+- Migration settings
+
+### Environment Variables
+
+- `AI_GATEWAY_URL`: Cloudflare AI API endpoint
+- `API_TOKEN`: Your Cloudflare API token
+- `NEXT_PUBLIC_WORKER_URL`: Worker URL for the frontend
+
+## 🎯 Features
+
+- **Persistent Memory**: Chat history stored in Durable Objects
+- **AI-Powered**: Uses Llama 3.3 via Cloudflare Workers AI
+- **Real-time Chat**: Modern, responsive chat interface
+- **Edge Computing**: Runs entirely on Cloudflare's edge network
+- **TypeScript**: Fully typed for better development experience
+
+## 🐛 Troubleshooting
+
+1. **Worker not responding**: Check that your API token has Workers permissions
+2. **AI responses failing**: Verify your account has Workers AI enabled
+3. **Memory not persisting**: Ensure Durable Objects are properly configured in wrangler.toml
+
+## 📝 License
+
+MIT License - feel free to use this project as a starting point for your own AI applications!
